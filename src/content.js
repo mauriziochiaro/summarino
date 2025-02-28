@@ -89,7 +89,8 @@
     modal.id = "openai-modal";
     modal.classList.add("openai-modal"); // per gli stili aggiuntivi
     Object.assign(modal.style, {
-      backgroundColor: "#fff",
+      backgroundColor: "#1f1f1f",
+      color: "#c0c0c0",
       padding: "20px",
       borderRadius: "8px",
       boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
