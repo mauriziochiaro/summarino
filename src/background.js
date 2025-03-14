@@ -1,9 +1,18 @@
 const apiKey = process.env.OPENAI_API_KEY;
 
-// Global language option variable
-let languageOption = "Italian"; // default
+// Default language value; will be updated from storage.
+let languageOption = "Italian";
 
-chrome.runtime.onInstalled.addListener(() => {
+// Helper function to update the context menu title.
+function updateLanguageContextMenu() {
+  chrome.contextMenus.update("toggleLanguage", {
+    title: `Language: ${languageOption}`
+  });
+}
+
+// Initialize context menus after retrieving settings from storage.
+chrome.storage.sync.get({ language: "Italian" }, (items) => {
+  languageOption = items.language;
   chrome.contextMenus.create({
     id: "summarize",
     title: "Summarize: \"%s\"",
@@ -28,10 +37,10 @@ chrome.runtime.onInstalled.addListener(() => {
 
 chrome.contextMenus.onClicked.addListener((info, tab) => {
   if (info.menuItemId === "toggleLanguage") {
-    // Toggle language between English and Italian.
+    // Toggle between English and Italian.
     languageOption = languageOption === "English" ? "Italian" : "English";
-    chrome.contextMenus.update("toggleLanguage", {
-      title: `Language: ${languageOption}`
+    chrome.storage.sync.set({ language: languageOption }, () => {
+      updateLanguageContextMenu();
     });
     return;
   }
@@ -45,27 +54,25 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     instruction = "Expand the following text, providing a detailed explanation and useful examples:";
   }
   
-  // Add language instruction based on the toggle.
+  // Use language setting to set the instruction.
   const languageInstruction = languageOption === "Italian" 
     ? "Rispondi in italiano." 
     : "Answer in English.";
   
-  // Instruct the model to format the output using Markdown
-  //const formattingInstruction = "Please format your answer using Markdown with headings, bullet points, and code blocks for clarity.";
+  // Ask the model to return pure HTML.
   const formattingInstruction = "Please format your answer in pure HTML. Use appropriate HTML tags such as <h1>, <h2>, <strong>, <ul>, <li>, <pre> and <code> for any code blocks, ensuring the result is valid HTML.";
 
   const selectedText = info.selectionText;
   const prompt = `${instruction}\n\n${selectedText}\n\n${languageInstruction}\n\n${formattingInstruction}`;
 
-  // Show spinner overlay in the current tab.
+  // Display spinner overlay.
   chrome.tabs.sendMessage(tab.id, { type: "displaySpinner" });
   
-  // Call the OpenAI API with model 'gpt-4o-mini'
   fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${apiKey}`  // Replace YOUR_API_KEY securely.
+      "Authorization": `Bearer ${apiKey}`
     },
     body: JSON.stringify({
       model: "gpt-4o-mini",

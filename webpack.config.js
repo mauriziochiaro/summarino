@@ -8,7 +8,7 @@ module.exports = {
     content: './src/content.js'
   },
   output: {
-    filename: '[name].js',  // genera background.js e content.js
+    filename: '[name].js',
     path: path.resolve(__dirname, 'dist')
   },
   mode: 'production',
@@ -16,7 +16,10 @@ module.exports = {
     new Dotenv(),
     new CopyWebpackPlugin({
       patterns: [
-        { from: 'src/manifest.json', to: '' }
+        { from: 'src/manifest.json', to: '' },
+        { from: 'src/popup.html', to: '' },
+        { from: 'src/popup.css', to: '' },
+        { from: 'src/popup.js', to: '' }
       ]
     })
   ]

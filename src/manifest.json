@@ -1,12 +1,17 @@
 {
   "manifest_version": 3,
-  "name": "Text Processor",
+  "name": "summarino",
   "version": "1.0",
   "description": "Highlight text and process it via OpenAI's GPT-4o mini.",
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Summarino Settings"
+  },
   "permissions": [
     "contextMenus",
     "scripting",
-    "activeTab"
+    "activeTab",
+    "storage"
   ],
   "background": {
     "service_worker": "background.js"
