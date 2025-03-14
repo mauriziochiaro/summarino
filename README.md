@@ -1,6 +1,6 @@
 # summarino
 
-summarino is a Chrome extension that enables users to summarize, explain in siple terms, or expand selected text using OpenAI's GPT-4o Mini. It supports English and Italian and integrates seamlessly into the browser's context menu.
+summarino is a Chrome extension that enables users to summarize, explain in simple terms, or expand selected text using OpenAI's GPT-4o Mini. It supports English and Italian and integrates seamlessly into the browser's context menu.
 
 ## Features
 - **Summarize**: Generate a concise summary of selected text.
